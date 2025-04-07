@@ -1,5 +1,7 @@
 function handleLogout() {
     localStorage.removeItem('token');
+    document.cookie = "userId=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+    document.cookie = "userName=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     alert('Logout successful');
     window.location.href = '/account.html';
 }

@@ -9,7 +9,7 @@ const { verifyToken, JWT_SECRET } = require('../middleware/auth');
 
 // Register Route
 router.post('/register', (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, address = "", phone = "", profilePicture = "" } = req.body;
     if (!name || !email || !password) {
         return res.status(400).json({ message: 'All fields are required' });
     }
@@ -22,7 +22,7 @@ router.post('/register', (req, res) => {
     bcrypt.hash(password, 10, (err, hash) => {
         if (err) return res.status(500).json({ message: 'Error hashing password' });
 
-        const newUser = { id: uuid.v4(), name, email, password: hash };
+        const newUser = { id: uuid.v4(), name, email, password: hash, address, phone, profilePicture };
         db.users.push(newUser);
         saveDatabase(db);
 
@@ -33,15 +33,31 @@ router.post('/register', (req, res) => {
             { expiresIn: '24h' }
         );
 
-        res.status(201).json({
+        res
+        .cookie('userId', newUser.id, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+            sameSite: 'Lax',
+        })
+        .cookie('userName', newUser.name, {
+            httpOnly: false, // You can access this in client-side JS if needed
+            maxAge: 24 * 60 * 60 * 1000,
+            sameSite: 'Lax',
+        })
+        .status(201)
+        .json({
             message: 'User registered successfully',
             token,
             user: {
                 id: newUser.id,
                 name: newUser.name,
-                email: newUser.email
+                email: newUser.email,
+                address: newUser.address,
+                phone: newUser.phone,
+                profilePicture: newUser.profilePicture,
             }
         });
+
     });
 });
 
@@ -80,7 +96,19 @@ router.post('/login', (req, res) => {
                 { expiresIn: '24h' }
             );
 
-            res.status(200).json({
+            res
+            .cookie('userId', user.id, {
+                httpOnly: true,
+                maxAge: 24 * 60 * 60 * 1000,
+                sameSite: 'Lax',
+            })
+            .cookie('userName', user.name, {
+                httpOnly: false,
+                maxAge: 24 * 60 * 60 * 1000,
+                sameSite: 'Lax',
+            })
+            .status(200)
+            .json({
                 message: 'Login successful',
                 token,
                 user: {
@@ -89,6 +117,7 @@ router.post('/login', (req, res) => {
                     email: user.email
                 }
             });
+
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
         }
