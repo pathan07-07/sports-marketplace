@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +10,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            
         }
 
         body {
@@ -22,7 +20,7 @@
             align-items: center;
             height: 100vh;
             color: #333;
-            background-image: url(inline_image_preview.jpg) ;
+            background-image: url(inline_image_preview.jpg);
             background-size: cover;
         }
 
@@ -117,13 +115,10 @@
         }
     </style>
 </head>
-
 <body>
-    
 
     <div class="profile-container">
         <div class="profile-header">
-            <!-- Default profile photo -->
             <img src="" alt="Profile Picture" id="profilePhoto">
             <h2>Edit Profile</h2>
         </div>
@@ -136,63 +131,108 @@
 
         <div class="profile-input">
             <label for="name">Full Name</label>
-            <input type="text" id="name" value="Full Name">
+            <input type="text" id="name" placeholder="Full Name" value="">
         </div>
 
         <div class="profile-input">
             <label for="email">Email</label>
-            <input type="email" id="email" value="Name@example.com">
+            <input type="email" id="email" placeholder="Name@example.com" value="">
         </div>
 
         <div class="profile-input">
             <label for="address">Address</label>
-            <textarea id="address" rows="3">123 Main St, Cityville</textarea>
+            <textarea id="address" placeholder="123 Main St, Cityville" rows="3" value=""></textarea>
         </div>
 
         <div class="profile-input">
             <label for="phone">Phone Number</label>
-            <input type="text" id="phone" value="+1234567890">
+            <input type="text" id="phone" placeholder="Phone Number" value="">
         </div>
 
-
         <!-- Save button -->
-        <button class="save-btn" id="saveBtn" >Save Changes</button>
+        <button class="save-btn" id="saveBtn">Save Changes</button>
     </div>
 
     <script>
-        // JavaScript to handle profile picture change
-        const photoInput = document.getElementById('photo');
-        const profilePhoto = document.getElementById('profilePhoto');
+        async function loadUserProfile() {
+            try {
+                const response = await fetch('http://localhost:3000/api/editprofile/getProfile', {
+                    method: 'GET',
+                    credentials: 'include',
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user profile');
+                }
 
-        photoInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    profilePhoto.src = reader.result;
-                };
-                reader.readAsDataURL(file);
+                const data = await response.json();
+                console.log('User Data:', data);
+
+                const getValueOrEmpty = (value) => value === undefined || value === null ? "" : value;
+
+                document.getElementById('name').value = getValueOrEmpty(data.name);
+                document.getElementById('email').value = getValueOrEmpty(data.email);
+                document.getElementById('address').value = getValueOrEmpty(data.address);
+                document.getElementById('phone').value = getValueOrEmpty(data.phone);
+
+                if (data.profilePicture) {
+                    document.getElementById('profilePhoto').src = data.profilePicture;
+                } else {
+                    document.getElementById('profilePhoto').src = 'user.png';
+                }
+            } catch (error) {
+                console.error('Error loading user profile:', error);
+                alert('Could not load user profile');
             }
-        });
+        }
+
+        window.onload = loadUserProfile;
 
         // Save button click event
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            // Retrieve all input values
+        document.getElementById('saveBtn').addEventListener('click', async () => {
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const address = document.getElementById('address').value;
             const phone = document.getElementById('phone').value;
+            const profilePicture = document.getElementById('photo').files[0];
 
-            // Simple validation (just for demonstration)
             if (name && email && address && phone) {
-                alert('Profile updated successfully!');
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('email', email);
+                formData.append('address', address);
+                formData.append('phone', phone);
+                if (profilePicture) {
+                    formData.append('profilePicture', profilePicture); // Attach profile picture file
+                }
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/editprofile/updateProfile', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                        },
+                        body: formData,
+                        credentials: 'include', // Send cookies with the request
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        alert('Profile updated successfully!');
+                        console.log(result);
+                    } else {
+                        alert('Error updating profile!');
+                    }
+                } catch (error) {
+                    console.error('Error updating profile:', error);
+                    alert('Error updating profile!');
+                }
             } else {
                 alert('Please fill out all fields.');
             }
         });
     </script>
-<script src="./js/logout.js" type="module"></script>
 
 </body>
-
 </html>

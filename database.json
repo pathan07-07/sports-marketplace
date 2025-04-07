@@ -32,7 +32,7 @@
     },
     {
       "id": "67be72dd-7cd8-4100-bbaf-34760ee18a47",
-      "name": "saifpatel",
+      "name": "Saif",
       "email": "saifradiocity@gmail.com",
       "password": "$2b$10$GOL0q0cpEz2VQFLWcJtwDew0WG8e8GvwyMwK8IxuwosL4IZ28iX5."
     },
@@ -41,6 +41,10 @@
       "name": "shaikhumar",
       "email": "shaikhumar3010@gmail.com",
       "password": "$2b$10$n5HSOFSQKC4ryP7N5ji6nexbXT5q2yD1JVfZ1Ztn6lkWqEOoIN7am"
+      "password": "$2b$10$GOL0q0cpEz2VQFLWcJtwDew0WG8e8GvwyMwK8IxuwosL4IZ28iX5.",
+      "address": "Pune, India",
+      "phone": "9876543210",
+      "profilePicture": "1744027710954.png"
     }
   ],
   "products": [
