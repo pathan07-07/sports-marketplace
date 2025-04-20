@@ -45,7 +45,9 @@
         </div>
         <div class="contact-option">
           <h3>Call Us</h3>
-          <p>Call us at <a href="tel:+91-7020660707">+91-7020660707</a>.</p>
+          <p>Call us at <a href="tel:+91-7020660707">+91-7020660707</a>.<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="tel:+91-7020660707">+91-9326782999</a>.<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="tel:+91-7020660707">+91-7774824429</a>.</p>
         </div>
         <div class="contact-option">
           <h3>Live Chat</h3>
@@ -60,19 +62,93 @@
       <h2>Send Us Feedback</h2>
       <form id="feedback-form">
         <label for="name">Name</label>
-        <input type="text" id="name" required>
-
+        <input type="text" id="name" name="name" required>
+    
         <label for="email">Email</label>
-        <input type="email" id="email" required>
-
+        <input type="email" id="email" name="email" required>
+        <label for="rating">Rating</label>
+        <div class="emoji-rating" id="emoji-rating">
+          <span data-rating="1">😠</span>
+          <span data-rating="2">😕</span>
+          <span data-rating="3">😐</span>
+          <span data-rating="4">😊</span>
+          <span data-rating="5">😍</span>
+        </div>
+        <input type="hidden" name="rating" id="rating-value">
+        <br>
+    
         <label for="message">Message</label>
-        <textarea id="message" rows="5" required></textarea>
-
+        <textarea id="message" name="message" rows="5" required></textarea>
+    
         <button type="submit">Submit Feedback</button>
-      </form>
+    </form>
     </div>
   </div>
+   
+<script>
+  // Emoji Rating Functionality
+  const emojis = document.querySelectorAll('.emoji-rating span');
+    const ratingValue = document.getElementById('rating-value');
 
+    emojis.forEach(emoji => {
+      emoji.addEventListener('click', () => {
+        emojis.forEach(e => e.classList.remove('selected'));
+        emoji.classList.add('selected');
+        ratingValue.value = emoji.dataset.rating;
+      });
+    });
+</script>
+<script>
+  const form = document.getElementById("feedback-form");
+  const emojiContainer = document.getElementById("emoji-rating");
+  const ratingInput = document.getElementById("rating-value");
+
+  // Handle emoji rating click
+  emojiContainer.addEventListener("click", function (e) {
+    if (e.target.tagName === "SPAN") {
+      const rating = e.target.getAttribute("data-rating");
+      ratingInput.value = rating;
+
+      // Highlight the selected emoji
+      document.querySelectorAll(".emoji-rating span").forEach(span => {
+        span.classList.remove("selected");
+      });
+      e.target.classList.add("selected");
+    }
+  });
+
+  // Handle form submission
+  form.addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent normal form submit
+
+    const formData = new FormData(form);
+
+    fetch("https://formspree.io/f/xoverogj", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json"
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        alert("Thanks for your feedback  😊 ! We respect your opinion"); // 👈 JS Alert
+        form.reset();
+        document.querySelectorAll(".emoji-rating span").forEach(span => {
+          span.classList.remove("selected");
+        });
+      } else {
+        alert("There was a problem sending your feedback. Please try again.");
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      alert("Something went wrong. Please try again later.");
+    });
+  });
+</script>
+
+     
   <script >
     // FAQ Toggle Functionality
 const faqQuestions = document.querySelectorAll('.faq-question');
@@ -97,8 +173,7 @@ document.getElementById('feedback-form').addEventListener('submit', function (e)
   const message = document.getElementById('message').value;
 
   // Simulate sending feedback (replace with actual API call)
-  console.log('Feedback submitted:', { name, email, message });
-  alert('Thank you for your feedback!');
+ 
 });
   </script>
 </body>
