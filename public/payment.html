@@ -1,203 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    
-    <!-- custom css file link  -->
-    <link rel="stylesheet" href="pay.css">
-    <link rel="stylesheet" href="pro.css">
-    <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+  <!-- custom css file link  -->
+  <link rel="stylesheet" href="pay.css">
+  <link rel="stylesheet" href="pro.css">
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
 
 
 </head>
+
 <body>
-    <div class="header">
+  <div class="header">
 
-        <div class="container">
-            <div class="navbar">
-    
-                <div class="logo">  
-                <img src="logo.png" width="125px">
-                </div>
-                <nav>
-                    <ul id="MenuItems">
-                    <li><a href="home.html">Home</a></li>
-                    <li><a href="Football.html">Football</a></li>
-                    <li><a href="Cricket.html">Cricket</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="account.html">Account</a></li>
-                    </ul>
-                    </nav>
-                   <a href="Cart.html"> <img src="my cart.png" width="30px" height="30px" alt=""></a>
-                    <img src="menu.png" class="menu-icon" onclick="menutoggle()">
-                </div>
-    
+    <div class="container">
+      <div class="navbar">
+
+        <div class="logo">
+          <img src="logo.png" width="125px">
         </div>
-    
-        </div>
+        <nav>
+          <ul id="MenuItems">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="Football.html">Football</a></li>
+            <li><a href="Cricket.html">Cricket</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="account.html">Account</a></li>
+          </ul>
+        </nav>
+        <a href="Cart.html"> <img src="my cart.png" width="30px" height="30px" alt=""></a>
+        <img src="menu.png" class="menu-icon" onclick="menutoggle()">
+      </div>
 
-        <div class="container1">
-            <form id="billing-form" action="https://formspree.io/f/mblgwqjg" method="POST">
-              <div class="row">
-                <div class="col">
-                  <h3 class="title">billing address</h3>
-          
-                  <div class="inputBox">
-                    <span  style="color:black">full name : * </span>
-                    <input type="text" placeholder="Full Name" id="fullname" name="fullname" required>
-                  </div>
-          
-                  <div class="inputBox">
-                    <span style="color:black">Number : * </span>
-                    <input type="text" placeholder="Mobile Number" id="phone" name="phone" required pattern="[0-9]{10}" title="Enter a 10-digit mobile number">
-                  </div>
-          
-                  <div class="inputBox">
-                    <span style="color:black">Email : * </span>
-                    <input type="email" placeholder="example@example.com" id="email" name="email" required>
-                  </div>
-          
-                  <div class="inputBox">
-                    <span style="color:black">Address : *</span>
-                    <input type="text" placeholder="Room - Street - Locality" id="address" name="address" required>
-                  </div>
-                   
-                  <div class="inputBox">
-                    <span style="color:black">ZIP Code : *</span>
-                    <input type="text" placeholder="123456" id="pincode" name="pincode" required pattern="[0-9]{6}" title="Enter a 6-digit ZIP code">
-                  </div>
-          
-                  <div class="inputBox">
-                    <span style="color:black">City : *</span> 
-                    <input type="text" placeholder="City" id="city" name="city" required>
-                  </div>
-          
-                  <div class="inputBox">
-                     <span style="color:black">State : *</span>
-                    <input type="text" placeholder="State" id="state" name="state" required>
-                  </div>
+    </div>
 
-                  <div class="inputbox">
-                    <span>Payment Type <span style="color:black">*</span> :</span><br><br>
-                    <select name="payment" id="payment" required>
-                      <option value="" disabled selected>Select payment type</option>
-                      <option value="cod">Cash On Delivery</option>
-                    </select>
-                  </div>
-          
-                </div>
-              </div>
-          
-              <input type="submit" value="proceed to checkout" class="submit-btn">
-            </form>
+  </div>
+
+  <div class="container1">
+    <form id="billing-form" action="https://formspree.io/f/mblgwqjg" method="POST">
+      <div class="row">
+        <div class="col">
+          <h3 class="title">billing address</h3>
+
+          <div class="inputBox">
+            <span style="color:black">full name : * </span>
+            <input type="text" placeholder="Full Name" id="fullname" name="fullname" required>
           </div>
-          
-                    </div>
-                </div>
-        
-                <input type="submit" value="proceed to checkout" class="submit-btn">
-            </form>
+
+          <div class="inputBox">
+            <span style="color:black">Number : * </span>
+            <input type="text" placeholder="Mobile Number" id="phone" name="phone" required pattern="[0-9]{10}"
+              title="Enter a 10-digit mobile number">
+          </div>
+
+          <div class="inputBox">
+            <span style="color:black">Email : * </span>
+            <input type="email" placeholder="example@example.com" id="email" name="email" required>
+          </div>
+
+          <div class="inputBox">
+            <span style="color:black">Address : *</span>
+            <input type="text" placeholder="Room - Street - Locality" id="address" name="address" required>
+          </div>
+
+          <div class="inputBox">
+            <span style="color:black">ZIP Code : *</span>
+            <input type="text" placeholder="123456" id="pincode" name="pincode" required pattern="[0-9]{6}"
+              title="Enter a 6-digit ZIP code">
+          </div>
+
+          <div class="inputBox">
+            <span style="color:black">City : *</span>
+            <input type="text" placeholder="City" id="city" name="city" required>
+          </div>
+
+          <div class="inputBox">
+            <span style="color:black">State : *</span>
+            <input type="text" placeholder="State" id="state" name="state" required>
+          </div>
+
+          <div class="inputbox">
+            <span>Payment Type <span style="color:black">*</span> :</span><br><br>
+            <select name="payment" id="payment" required>
+              <option value="" disabled selected>Select payment type</option>
+              <option value="cod">Cash On Delivery</option>
+            </select>
+          </div>
+
         </div>
-        <script>
-            // Autofill city/state using India Post API
-            document.getElementById('pincode').addEventListener('blur', function () {
-              const pincode = this.value.trim();
-              if (pincode.length === 6 && /^[0-9]{6}$/.test(pincode)) {
-                fetch(`https://api.postalpincode.in/pincode/${pincode}`)
-                  .then(response => response.json())
-                  .then(data => {
-                    if (data[0].Status === "Success") {
-                      const postOffice = data[0].PostOffice[0];
-                      document.getElementById('city').value = postOffice.District;
-                      document.getElementById('state').value = postOffice.State;
-                    } else {
-                      alert("❌ Invalid PIN code. Please enter a valid one.");
-                      document.getElementById('city').value = "";
-                      document.getElementById('state').value = "";
-                    }
-                  })
-                  .catch(() => {
-                    alert("⚠️ Unable to fetch location. Please try again.");
-                  });
-              }
-            });
-          
-            // Preserve and restore form values
-            const form = document.getElementById('billing-form');
-            const fields = ['fullname', 'phone', 'email', 'address', 'city', 'state', 'pincode', 'payment'];
-          
-            // Restore previous values
-            window.addEventListener('DOMContentLoaded', () => {
-              fields.forEach(id => {
-                const value = localStorage.getItem(id);
-                if (value) {
-                  const element = document.getElementById(id);
-                  if (element) element.value = value;
-                }
-              });
-            });
-          
-            // Handle form submission
-            form.addEventListener('submit', function (e) {
-  e.preventDefault();
+      </div>
 
-  let isValid = true;
+      <input type="submit" value="proceed to checkout" class="submit-btn">
+    </form>
+  </div>
 
-  // Store values and validate
-  const formData = {};
-  fields.forEach(id => {
-    const input = document.getElementById(id);
-    const value = input.value.trim();
-    localStorage.setItem(id, value);
-    if (!value) isValid = false;
-    formData[id] = value;
-  });
+  </div>
+  </div>
 
-  if (!isValid) {
-    alert("⚠️ Please fill in all required fields.");
-    return;
-  }
-
-  // Build the payload for Formspree
-  const payload = new FormData();
-  for (let key in formData) {
-    payload.append(key, formData[key]);
-  }
-
-  fetch("https://formspree.io/f/mzzeolnb", {
-    method: "POST",
-    body: payload,
-    headers: {
-      'Accept': 'application/json'
-    }
-  })
-    .then(response => {
-      if (response.ok) {
-        alert("✅ Your order is confirmed! Thank you for shopping with us. Your order will be delivered in 8 days.");
-        localStorage.clear();
-        form.reset();
-      } else {
-        return response.json().then(data => {
-          alert("⚠️ Submission failed: " + (data.error || "Unknown error"));
-        });
+  <input type="submit" value="proceed to checkout" class="submit-btn">
+  </form>
+  </div>
+  <script>
+    // Autofill city/state using India Post API
+    document.getElementById('pincode').addEventListener('blur', function () {
+      const pincode = this.value.trim();
+      if (pincode.length === 6 && /^[0-9]{6}$/.test(pincode)) {
+        fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data[0].Status === "Success") {
+              const postOffice = data[0].PostOffice[0];
+              document.getElementById('city').value = postOffice.District;
+              document.getElementById('state').value = postOffice.State;
+            } else {
+              alert("❌ Invalid PIN code. Please enter a valid one.");
+              document.getElementById('city').value = "";
+              document.getElementById('state').value = "";
+            }
+          })
+          .catch(() => {
+            alert("⚠️ Unable to fetch location. Please try again.");
+          });
       }
-    })
-    .catch(error => {
-      console.error("Submission error:", error);
-      alert("⚠️ Failed to send data. Please try again.");
     });
-});
+
+    // Preserve and restore form values
+    const form = document.getElementById('billing-form');
+    const fields = ['fullname', 'phone', 'email', 'address', 'city', 'state', 'pincode', 'payment'];
+
+    // Restore previous values
+    window.addEventListener('DOMContentLoaded', () => {
+      fields.forEach(id => {
+        const value = localStorage.getItem(id);
+        if (value) {
+          const element = document.getElementById(id);
+          if (element) element.value = value;
+        }
+      });
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      let isValid = true;
+
+      // Store values and validate
+      const formData = {};
+      fields.forEach(id => {
+        const input = document.getElementById(id);
+        const value = input.value.trim();
+        localStorage.setItem(id, value);
+        if (!value) isValid = false;
+        formData[id] = value;
+      });
+
+      if (!isValid) {
+        alert("⚠️ Please fill in all required fields.");
+        return;
+      }
+
+      // Build the payload for Formspree
+      const payload = new FormData();
+      for (let key in formData) {
+        payload.append(key, formData[key]);
+      }
+
+      fetch("https://formspree.io/f/mzzeolnb", {
+        method: "POST",
+        body: payload,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            alert("✅ Your order is confirmed! Thank you for shopping with us. Your order will be delivered in 8 days.");
+            localStorage.clear();
+            form.reset();
+          } else {
+            return response.json().then(data => {
+              alert("⚠️ Submission failed: " + (data.error || "Unknown error"));
+            });
+          }
+        })
+        .catch(error => {
+          console.error("Submission error:", error);
+          alert("⚠️ Failed to send data. Please try again.");
+        });
 
 
-          </script>
-          
-          
-          
+      const placeOrder = async () => {
+        try {
+          debugger;
+          const token = localStorage.getItem("token");
+          const userId = localStorage.getItem("userId");
+          if (!token) {
+            alert("Authentication required. Please log in.");
+            return;
+          }
+
+          const response = await fetch(`/api/orders`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId: userId, shippingAddress: "Aurangabad" })
+          })
+
+          if (!response.ok) {
+            console.error("HTTP error! status:", response.status);
+            return;
+          }
+
+          const order = await response.json();
+          console.log(order);
+          window.location.href = '/home.html';  // Redirect to home page (for now just a placeholder)
+        } catch (error) {
+          console.error("Error fetching cart items:", error);
+        }
+      }
+      placeOrder();
+    });
+
+
+  </script>
+
+
+
 </body>
+
 </html>

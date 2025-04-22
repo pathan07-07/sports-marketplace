@@ -841,62 +841,8 @@
       "id": "7dfeaf54-dd10-439a-b611-fb8d9be5c72c"
     }
   ],
-  "orders": [],
-  "cart": [
-    {
-      "id": "e3b334be-c557-4b7c-bfec-1e8381b7b0a5",
-      "productId": "d863c49b-2ccc-4413-b065-a87869475c7d",
-      "quantity": "1",
-      "price": "2500",
-      "userId": "0405037a-ac1d-446f-937e-a5a9e16c8b59"
-    },
-    {
-      "id": "1498e82b-d577-41c6-825a-fe6544216924",
-      "productId": "729dc1a9-f34e-4907-883f-acd069aa3baf",
-      "quantity": 18,
-      "size": "XL",
-      "price": "2000",
-      "userId": "0405037a-ac1d-446f-937e-a5a9e16c8b59"
-    },
-    {
-      "id": "f521b5db-c5d2-48d0-b516-526a3afdbeca",
-      "productId": "60db2d9e-e688-4f24-8989-d6cf22ffcecd",
-      "quantity": "4",
-      "size": "XL",
-      "price": "1800",
-      "userId": "0405037a-ac1d-446f-937e-a5a9e16c8b59"
-    },
-    {
-      "id": "0cbc16d5-7697-4dfe-82fd-1492c1ed4c5d",
-      "productId": "729dc1a9-f34e-4907-883f-acd069aa3baf",
-      "quantity": "1",
-      "size": "M",
-      "price": "2000",
-      "userId": "0405037a-ac1d-446f-937e-a5a9e16c8b59"
-    },
-    {
-      "id": "a782c529-27ce-4f62-a12f-090002ae5da1",
-      "productId": "0deb1f67-2fee-439e-9a59-7338c531739c",
-      "quantity": "1",
-      "size": "S",
-      "price": "900",
-      "userId": "f4525219-98b9-49b5-bbf6-695e49c4ad60"
-    },
-    {
-      "id": "af8d609e-1749-4bc3-86f8-274880433bd9",
-      "productId": "503644c8-cf61-45cc-a8ce-8ac56088d114",
-      "quantity": "1",
-      "size": "5",
-      "price": "900",
-      "userId": "f4525219-98b9-49b5-bbf6-695e49c4ad60"
-    },
-    {
-      "id": "65a827af-fc1d-4a87-a141-5aacfdd60d8a",
-      "productId": "d863c49b-2ccc-4413-b065-a87869475c7d",
-      "quantity": "1",
-      "size": "L",
-      "price": "2500",
-      "userId": "8d04508e-c3e1-48b7-b6b2-8452af84aa6e"
-    }
-  ]
+  "orders": [
+    
+  ],
+  "cart": []
 }

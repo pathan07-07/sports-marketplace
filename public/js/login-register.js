@@ -47,6 +47,7 @@ async function handleLogin(event) {
             throw new Error(data.message || 'Login failed');
         }
         localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.user.id);
         alert('Login successful');
         window.location.href = '/home.html';
     } catch (error) {

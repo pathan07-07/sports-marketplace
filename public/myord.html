@@ -16,8 +16,7 @@
         /* Body and Layout */
         body {
             font-family: Arial, sans-serif;
-            background: radial-gradient(rgb(180, 180, 230),#696666);
-
+            background: radial-gradient(rgb(180, 180, 230), #696666);
             padding: 20px;
         }
 
@@ -59,15 +58,15 @@
         .orders-table td {
             padding: 15px;
             text-align: left;
-            border-bottom: transparent
+            border-bottom: transparent;
         }
 
         .orders-table th {
-            background-color: transparent
+            background-color: transparent;
         }
 
         .orders-table tr:hover {
-            background-color: rosybrown
+            background-color: rosybrown;
         }
 
         /* Card Layout */
@@ -95,7 +94,7 @@
 
         .order-card p {
             font-size: 1rem;
-            color: #333
+            color: #333;
         }
 
         .order-actions {
@@ -165,6 +164,32 @@
                 margin: 10px 0;
             }
         }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .loading-spinner:after {
+            content: '';
+            border: 4px solid transparent;
+            border-top: 4px solid teal;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -178,11 +203,15 @@
             </div>
         </header>
 
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner"></div>
+
         <!-- Order Cards Section (for mobile view) -->
+        <div id="no-orders" style="color: red; text-align: center; font-size: 20px; margin-top: 100px;">No orders to show !!</div>
         <div class="order-cards-container" id="orderCardsContainer"></div>
 
         <!-- Orders Table Section (for desktop view) -->
-        <table class="orders-table" id="ordersTable">
+        <!-- <table class="orders-table" id="ordersTable">
             <thead>
                 <tr>
                     <th>Order ID</th>
@@ -194,7 +223,7 @@
                 </tr>
             </thead>
             <tbody id="ordersTableBody"></tbody>
-        </table>
+        </table> -->
     </div>
 
     <!-- Modal for Order Details -->
@@ -207,17 +236,60 @@
     </div>
 
     <script>
-        // Mock order data
-        const orders = [
-            {
-                orderId: '12345',
-                date: '2025-02-12',
-                products: ['PREMIUM EDITION FOOTBALL KIT'],
-                price: '2500',
-                status: 'Shipped'
+        let orderItems = [];
+    
+        // Mock or API fetched data
+        const fetchOrdersData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const userId = localStorage.getItem("userId");
+    
+                if (!token) {
+                    alert("Authentication required. Please log in.");
+                    return;
+                }
+    
+                const response = await fetch(`/api/orders/get-orders/${userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+    
+                if (!response.ok) {
+                    console.error("HTTP error! status:", response.status);
+                    return;
+                }
+    
+                let fetchedOrders = await response.json();
+                if(fetchedOrders) {
+                    document.getElementById("no-orders").style.display = "none";
+                }
+                // Fetch all products
+                let fetchProducts = await fetch("/api/products");
+                let fetchedProducts = await fetchProducts.json();
+    
+                // Map product IDs to the corresponding items in the order
+                fetchedOrders.forEach(order => {
+                    order.items.forEach(item => {
+                        const product = fetchedProducts.find(product => product.id === item.productId);
+                        if (product) {
+                            item.productName = product.name;
+                        }
+                    });
+                });
+    
+                orderItems = fetchedOrders;
+                console.log(orderItems);
+                renderOrders();
+    
+            } catch (error) {
+                console.error("Error fetching order data:", error);
+            } finally {
+                document.getElementById('loadingSpinner').style.display = 'none'; // Hide spinner after data fetch
             }
-        ];
-
+        };
+    
         // Elements
         const ordersTableBody = document.getElementById('ordersTableBody');
         const orderCardsContainer = document.getElementById('orderCardsContainer');
@@ -225,81 +297,101 @@
         const modalOverlay = document.getElementById('modalOverlay');
         const modalOrderDetails = document.getElementById('modalOrderDetails');
         const closeModalBtn = document.getElementById('closeModalBtn');
-
-        // Function to render orders table
-        function renderOrdersTable(ordersData) {
+    
+        function formatDate(dateString) {
+            const dateObj = new Date(dateString);
+            return `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
+        }
+    
+        // Render orders in table format (one row per item)
+        const renderOrdersTable = (ordersData) => {
             ordersTableBody.innerHTML = '';
             ordersData.forEach(order => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${order.orderId}</td>
-                    <td>${order.date}</td>
-                    <td>${order.products.join(', ')}</td>
-                    <td>${order.price}</td>
-                    <td>${order.status}</td>
-                    <td><button class="view-details-btn" onclick="viewOrderDetails('${order.orderId}')">View Details</button></td>
-                `;
-                ordersTableBody.appendChild(row);
+                order.items.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td title="${order.id}">${order.id.length > 15 ? order.id.slice(0, 15) + "..." : order.id}</td>
+                        <td>${formatDate(order.createdAt)}</td>
+                        <td>${item.productName}</td>
+                        <td>${item.price}</td>
+                        <td>${order.status}</td>
+                        <td><button class="view-details-btn" onclick="viewOrderDetails('${order.id}')">View Details</button></td>
+                    `;
+                    ordersTableBody.appendChild(row);
+                });
             });
-        }
-
-        // Function to render orders as cards
-        function renderOrderCards(ordersData) {
+        };
+    
+        // Render orders as cards (one card per item)
+        const renderOrderCards = (ordersData) => {
             orderCardsContainer.innerHTML = '';
             ordersData.forEach(order => {
-                const card = document.createElement('div');
-                card.classList.add('order-card');
-                card.innerHTML = `
-                    <h3>Order ID: ${order.orderId}</h3>
-                    <p>Date: ${order.date}</p>
-                    <p>Products: ${order.products.join(', ')}</p>
-                    <p>Price: ${order.price}</p>
-                    <p>Status: ${order.status}</p>
-                    <div class="order-actions">
-                        <button class="view-details-btn" onclick="viewOrderDetails('${order.orderId}')">View Details</button>
-                    </div>
-                `;
-                orderCardsContainer.appendChild(card);
+                order.items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.classList.add('order-card');
+                    card.innerHTML = `
+                        <h3>Product: ${item.productName}</h3>
+                        <p>Order ID: ${order.id}</p>
+                        <p>Date: ${formatDate(order.createdAt)}</p>
+                        <p>Price: ${item.price}</p>
+                        <p>Status: ${order.status}</p>
+                        <div class="order-actions">
+                            <button class="view-details-btn" onclick="viewOrderDetails('${order.id}')">View Details</button>
+                        </div>
+                    `;
+                    orderCardsContainer.appendChild(card);
+                });
             });
-        }
-
-        // Function to filter orders based on search input
-        function filterOrders(query) {
-            const filteredOrders = orders.filter(order => {
-                return order.products.some(product => product.toLowerCase().includes(query.toLowerCase())) ||
-                    order.date.includes(query) ||
-                    order.status.toLowerCase().includes(query.toLowerCase());
-            });
-            renderOrdersTable(filteredOrders);
-            renderOrderCards(filteredOrders);
-        }
-
-        // Function to display modal with order details
-        function viewOrderDetails(orderId) {
-            const order = orders.find(o => o.orderId === orderId);
+        };
+    
+        // Render orders into table and cards
+        const renderOrders = () => {
+            // renderOrdersTable(orderItems);
+            renderOrderCards(orderItems);
+        };
+    
+        // Show modal with order details
+        const viewOrderDetails = (orderId) => {
+            const order = orderItems.find(o => o.id === orderId);
             modalOrderDetails.innerHTML = `
-                <p><strong>Order ID:</strong> ${order.orderId}</p>
-                <p><strong>Date:</strong> ${order.date}</p>
-                <p><strong>Products:</strong> ${order.products.join(', ')}</p>
-                <p><strong>Price:</strong> ${order.price}</p>
+                <p><strong>Order ID:</strong> ${order.id}</p>
+                <p><strong>Date:</strong> ${formatDate(order.createdAt)}</p>
                 <p><strong>Status:</strong> ${order.status}</p>
+                <h3>Items:</h3>
+                <ul>
+                    ${order.items.map(item => `
+                        <li>
+                            <strong>${item.productName}</strong> - ${item.price} - ${item.size}
+                        </li>
+                    `).join('')}
+                </ul>
             `;
             modalOverlay.style.display = 'flex';
-        }
-
+        };
+    
         // Close modal
         closeModalBtn.addEventListener('click', () => {
             modalOverlay.style.display = 'none';
         });
-
-        // Search functionality
+    
+        // Filter orders based on search input
         searchInput.addEventListener('input', () => {
-            filterOrders(searchInput.value);
+            const query = searchInput.value.toLowerCase();
+            const filteredOrders = orderItems.filter(order =>
+                order.items.some(item => item.productName.toLowerCase().includes(query)) ||
+                order.createdAt.includes(query) ||
+                order.status.toLowerCase().includes(query)
+            );
+            // renderOrdersTable(filteredOrders);
+            renderOrderCards(filteredOrders);
         });
-
+    
         // Initial rendering
-        renderOrdersTable(orders);
-        renderOrderCards(orders);
+        document.getElementById('loadingSpinner').style.display = 'block'; // Show spinner initially
+        fetchOrdersData();
+    
     </script>
-<script src="./js/logout.js" type="module"></script>
+    
 </body>
+
+</html>

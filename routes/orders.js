@@ -4,10 +4,23 @@ const uuid = require('uuid');
 const { loadDatabase, saveDatabase } = require('../utils/db');
 
 // Get All Orders
-router.get('/', (req, res) => {
+router.get('/get-orders/:id', (req, res) => {
+    const userId = req.params.id;
+
+    if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
+    }
+
     const db = loadDatabase();
-    res.status(200).json(db.orders);
+    const orders = db.orders.filter(order => order.userId === userId);
+
+    if (!orders || orders.length === 0) {
+        return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.status(200).json(orders);
 });
+
 
 // Get Single Order
 router.get('/:id', (req, res) => {
@@ -34,10 +47,12 @@ router.post('/', (req, res) => {
         return res.status(400).json({ message: 'Cart is empty' });
     }
 
+    let cartItems = db.cart.filter(item => item.userId === userId);
+
     const newOrder = {
         id: uuid.v4(),
         userId,
-        items: [...db.cart],
+        items: [...cartItems],
         shippingAddress,
         status: 'pending',
         totalAmount: db.cart.reduce((total, item) => total + (item.price * item.quantity), 0),

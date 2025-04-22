@@ -47,7 +47,7 @@ router.post('/', (req, res) => {
             quantity,
             size,
             price: product.price,
-            userId: user.id
+            userId: user.id,
         });
     }
 
